@@ -15,16 +15,22 @@
 #include "util.h"
 
 // TODO: implement
+void swap(UINT* A, int i, int j){
+    int temp = A[j];
+    A[j] = A[i];
+    A[i] = temp; 
+}
+
 int partition(UINT* A, int lo, int hi){
     int pivot, i = lo;
     pivot = A[hi];
     for (int j = lo;j<hi;j++){
         if (A[j] < pivot){
-            A[i] = A[j];
+            swap(A,i,j);
             i++;
         }
     }
-    A[i] = A[hi];
+    swap(A,i,hi);
     return i;
 
 }
