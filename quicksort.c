@@ -1,3 +1,4 @@
+#define _POSIX_C_SOURCE 199309L
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -7,6 +8,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include <time.h>
+#include <ctype.h>
+#include <pthread.h>
 #include "types.h"
 #include "const.h"
 #include "util.h"
@@ -48,8 +51,50 @@ int main(int argc, char** argv) {
            sysconf(_SC_NPROCESSORS_ONLN));
 
     /* TODO: parse arguments with getopt */
+    char* Tvalue;
+    int Evalue = 0;
+    int index, c;
+
+    opterr = 0;
+
+	while ((c = getopt (argc, argv, "E:T:")) != -1)
+		switch (c){
+			case 'E':
+				Evalue = atoi(optarg);
+				break;
+			case 'T':
+				Tvalue = optarg;
+				break;
+			case '?':
+				if (optopt == 'T' || optopt == 'E')
+				  fprintf (stderr, "Option -%c requires an argument.\n", optopt);
+				else if (isprint(optopt))
+				  fprintf (stderr, "Unknown option `-%c'.\n", optopt);
+				else
+				  fprintf (stderr,
+					   "Unknown option character `\\x%x'.\n",
+					   optopt);
+				return 1;
+			default:
+				abort ();
+		}
+	printf ("E = %d, T = %d\n",Evalue, atoi(Tvalue));
+
+	for (index = optind; index < argc; index++)
+		printf ("Non-option argument %s\n", argv[index]);
+
 
     /* TODO: start datagen here as a child process. */
+
+    pid_t pid;
+	pid = fork();
+	if (pid == -1){   
+		fprintf(stderr, "Error en fork\n");
+		exit(EXIT_FAILURE);
+	}
+	if (pid == 0){
+		execlp("./datagen","./datagen",NULL);
+	}
 
     /* Create the domain socket to talk to datagen. */
     struct sockaddr_un addr;
@@ -71,9 +116,12 @@ int main(int argc, char** argv) {
     }
 
     /* DEMO: request two sets of unsorted random numbers to datagen */
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < Evalue; i++) {
         /* T value 3 hardcoded just for testing. */
-        char *begin = "BEGIN U 3";
+        char palabra[15];
+        strcpy(palabra,"BEGIN U");
+        strcat(palabra, Tvalue);
+        char *begin = palabra;
         int rc = strlen(begin);
 
         /* Request the random number stream to datagen */
