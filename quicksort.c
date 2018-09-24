@@ -12,7 +12,26 @@
 #include "util.h"
 
 // TODO: implement
+int partition(UINT* A, int lo, int hi){
+    int pivot, i = lo;
+    pivot = A[hi];
+    for (int j = lo;j<hi;j++){
+        if (A[j] < pivot){
+            A[i] = A[j];
+            i++;
+        }
+    }
+    A[i] = A[hi];
+    return i;
+
+}
 int quicksort(UINT* A, int lo, int hi) {
+    if (lo < hi){
+        int p;
+        p = partition(A,lo,hi);
+        quicksort(A,lo,p-1);
+        quicksort(A,p+1,hi);
+    }
     return 0;
 }
 
