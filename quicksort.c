@@ -161,10 +161,33 @@ int main(int argc, char** argv) {
             readbytes = read(fd, readbuf + readvalues, sizeof(UINT) * 1000);
             readvalues += readbytes / 4;
         }
+        for (UINT *pv = readbuf; pv < readbuf + numvalues; pv++) {
+            if (pv == readbuf){
+                printf("E%d:%u,",i+1, *pv);
+            }
+            if (pv == readbuf + numvalues - 1){
+                printf("%u\n", *pv);
+            }
+            else{
+                printf("%u,", *pv); 
+            }
+            
 
+        }
+        quicksort(readbuf,0,numvalues);
         /* Print out the values obtained from datagen */
         for (UINT *pv = readbuf; pv < readbuf + numvalues; pv++) {
-            printf("%u\n", *pv);
+            if (pv == readbuf){
+                printf("S%d:%u,",i+1, *pv);
+            }
+            if (pv == readbuf + numvalues - 1){
+                printf("%u\n", *pv);
+            }
+            else{
+                printf("%u,", *pv); 
+            }
+            
+
         }
 
         free(readbuf);
