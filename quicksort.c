@@ -200,6 +200,10 @@ int main(int argc, char** argv) {
         size_t readbytes = 0;
 
         UINT *readbuf = malloc(sizeof(UINT) * numvalues);
+        if (readbuf == NULL){
+            fprintf(stderr, "Error en fork\n");
+		    exit(EXIT_FAILURE);
+        }
 
         while (readvalues < numvalues) {
             /* read the bytestream */
