@@ -7,7 +7,7 @@ Informe:
 
 Problemas encontrados: 
 
-Nuestro programa cuando se ejecuta para T > 4 se ejecuta hasta que hay error de core dumped, probamos con un pc con 4 nucleos y tuvimos el mismo problema, sospechamos que esto es debido a la cantidad grande de threats que usa nuestro codigo.
+Nuestro programa cuando se ejecuta para T > 4 se ejecuta hasta que hay error de core dumped, probamos con un pc con 4 nucleos, sospechamos que esto es debido a la cantidad grande de threads que usa nuestro codigo.
 
 Con serial quicksort al cambio, nuestro programa corrió exitosamente con 3 >= T >= 8.
 
