@@ -1,2 +1,20 @@
+Miembros:
+
 Raimundo González
 Enrique Riveros
+
+Informe:
+
+Problemas encontrados: 
+
+Nuestro programa cuando se ejecuta para T > 4 se ejecuta hasta que hay error de core dumped, probamos con un pc con 4 nucleos y tuvimos el mismo problema, sospechamos que esto es debido a la cantidad grande de threats que usa nuestro codigo.
+
+Con serial quicksort al cambio, nuestro programa corrió exitosamente con 3 >= T >= 8.
+
+En nuestro codigo definimos las funciones quicksort (serial quicksort) y parallel_quicksort, de los cuales por default nuestro programa usa parallel quicksort para ordenar 10pow(T) datos, donde El "E" define la cantidad de experimentos que hará, asi que por ejemplo si usamos T 3 y E 2, retornara:
+ E1: 1000 datos desordenados.
+ S1: 1000 datos ordenados por parallel quicksort.
+ E2: otros 1000 datos desordenados.
+ S2: esos otros 1000 datos ordenados usando parallel quicksort.
+
+ Si se quiere usar el serial quicksort, basta con comentar las lineas 245 - 258 y descomentar las lineas 230-243 y comentar la linea 231.
