@@ -13,6 +13,7 @@
 #include "types.h"
 #include "const.h"
 #include "util.h"
+#include <assert.h>
 
 struct quicksort_struct{
     UINT *A;
@@ -84,7 +85,8 @@ int parallel_quicksort(UINT* A, int lo, int hi) {
         //En vola cambiar el pivot a pivot-1
 
         pthread_t thread;
-        pthread_create(&thread,NULL,quicksort_thread,&quicki);
+        int ret =pthread_create(&thread,NULL,quicksort_thread,&quicki);
+        assert((ret == 0) && "Thread creation failed");
         parallel_quicksort(A,pivot+1,hi);
         pthread_join(thread,NULL);
     }
