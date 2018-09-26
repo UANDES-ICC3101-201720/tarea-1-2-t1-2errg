@@ -14,6 +14,19 @@
 #include "const.h"
 #include "util.h"
 
+struct quicksort_struct{
+    UINT *A;
+    int lo;
+    int hi;
+};
+int parallel_quicksort(UINT *array, int lo, int hi);
+
+void* quicksort_thread(void *init){
+    struct quicksort_struct *quick = init;
+    parallel_quicksort(quick -> A, quick->lo, quick->hi);
+    return NULL;
+}
+
 // TODO: implement
 void swap(UINT* A, int i, int j){
     int temp = A[j];
@@ -34,6 +47,26 @@ int partition(UINT* A, int lo, int hi){
     return i;
 
 }
+int Partition(UINT *array, int left, int right, int pivot)
+{
+    int pivotValue = array[pivot];
+    swap(array,pivot,right);
+    //swap(&array[pivot], &array[right]);
+    int storeIndex = left;
+    for (int i = left; i < right; i++)
+    {
+        if (array[i] <= pivotValue)
+        {
+            //swap(&array[i], &array[storeIndex]);
+            swap(array,i,storeIndex);
+            storeIndex++;
+        }
+    }
+    //swap(A,i,j);
+    swap(array,storeIndex,right);
+    //swap(&array[storeIndex], &array[right]);
+    return storeIndex;
+}
 int quicksort(UINT* A, int lo, int hi) {
     if (lo < hi){
         int p;
@@ -46,8 +79,23 @@ int quicksort(UINT* A, int lo, int hi) {
 
 // TODO: implement
 int parallel_quicksort(UINT* A, int lo, int hi) {
+    int pivot;
+    if (hi>lo){
+        pivot = lo + (hi - lo) / 2;
+        pivot=Partition(A,lo,hi,pivot);
+        struct quicksort_struct quicki={A,lo,pivot-1};
+        //En vola cambiar el pivot a pivot-1
+
+        pthread_t thread;
+        pthread_create(&thread,NULL,quicksort_thread,&quicki);
+        parallel_quicksort(A,pivot+1,hi);
+        pthread_join(thread,NULL);
+    }
+
+
     return 0;
 }
+
 
 int main(int argc, char** argv) {
     printf("[quicksort] Starting up...\n");
@@ -162,11 +210,53 @@ int main(int argc, char** argv) {
             readvalues += readbytes / 4;
         }
 
+
+
+        /* Print out the values obtained from datagen */
+       for (UINT *pv = readbuf; pv < readbuf + numvalues; pv++) {
+            if (pv == readbuf){
+                printf("E%d:%u,",i+1, *pv);
+            }
+            if (pv == readbuf + numvalues - 1){
+                printf("%u\n", *pv);
+            }
+            else{
+                printf("%u,", *pv); 
+            }
+            
+        }
+       
+        /*quicksort(readbuf,0,numvalues);
+         Print out the values obtained from datagen 
+        for (UINT *pv = readbuf; pv < readbuf + numvalues; pv++) {
+            if (pv == readbuf){
+                printf("S%d:%u,",i+1, *pv);
+            }
+            if (pv == readbuf + numvalues - 1){
+                printf("%u\n", *pv);
+            }
+            else{
+                printf("%u,", *pv); 
+            }
+            
+        }*/
+
+        parallel_quicksort(readbuf,0,numvalues);
         /* Print out the values obtained from datagen */
         for (UINT *pv = readbuf; pv < readbuf + numvalues; pv++) {
-            printf("%u\n", *pv);
+            if (pv == readbuf){
+                printf("PS%d:%u,",i+1, *pv);
+            }
+            if (pv == readbuf + numvalues - 1){
+                printf("%u\n", *pv);
+            }
+            else{
+                printf("%u,", *pv); 
+            }
+            
         }
 
+        
         free(readbuf);
     }
 
