@@ -201,7 +201,7 @@ int main(int argc, char** argv) {
 
         UINT *readbuf = malloc(sizeof(UINT) * numvalues);
         if (readbuf == NULL){
-            fprintf(stderr, "Error en fork\n");
+            fprintf(stderr, "Malloc retorno NULL\n");
 		    exit(EXIT_FAILURE);
         }
 
