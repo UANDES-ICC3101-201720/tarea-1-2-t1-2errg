@@ -51,20 +51,17 @@ int Partition(UINT *array, int left, int right, int pivot)
 {
     int pivotValue = array[pivot];
     swap(array,pivot,right);
-    //swap(&array[pivot], &array[right]);
     int storeIndex = left;
     for (int i = left; i < right; i++)
     {
         if (array[i] <= pivotValue)
         {
-            //swap(&array[i], &array[storeIndex]);
             swap(array,i,storeIndex);
             storeIndex++;
         }
     }
     //swap(A,i,j);
     swap(array,storeIndex,right);
-    //swap(&array[storeIndex], &array[right]);
     return storeIndex;
 }
 int quicksort(UINT* A, int lo, int hi) {
