@@ -242,7 +242,7 @@ int main(int argc, char** argv) {
         /* Print out the values obtained from datagen */
         for (UINT *pv = readbuf; pv < readbuf + numvalues; pv++) {
             if (pv == readbuf){
-                printf("PS%d:%u,",i+1, *pv);
+                printf("S%d:%u,",i+1, *pv);
             }
             if (pv == readbuf + numvalues - 1){
                 printf("%u\n", *pv);
